@@ -1,0 +1,17 @@
+%_topdir        %(echo $HOME)/builds
+%_sourcedir     %{_topdir}/src/
+%_specdir       %{_topdir}/spec/
+%_tmppath       %{_topdir}/tmp
+%_builddir      %{_topdir}/build
+%_rpmdir        %{_topdir}/pkg
+%_srcrpmdir     %{_topdir}/pkg
+%_buildroot     %{_topdir}/tmp/%{name}-%{version}-root
+
+%packager       %(echo ${USER}@)%(hostname)
+%distribution   cloudware
+%dist cloudware
+
+%bundler_install_to  /usr/local/
+
+%debug_package %{nil}
+

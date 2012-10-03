@@ -4,7 +4,7 @@
 
 # don't process unless we have a pty
 #  this way things like scp work 
-[ -z "$PS1" ] && return
+[ -z "$PS1" ] && exit
 
 
 # include omnichef if its there

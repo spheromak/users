@@ -30,14 +30,15 @@ search(:groups, "status:remove") do |group|
 end
 
 
-node[node.domain][:accounts][:groups].each do |group|
+node[:accounts][:groups].each do |group|
   members = group_members group
+
   # need to make sure the group exists b4 we add users. 
   setup_group(group)
 
   unless members.empty?
     members.each do |user|
-      next if node[node.domain][:accounts][:ignore_users].include?(user)
+      next if node[:accounts][:ignore_users].include?(user)
       setup_user user
       setup_env  user
     end
@@ -45,8 +46,8 @@ node[node.domain][:accounts][:groups].each do |group|
   setup_group(group, members)
 end
 
-node[node.domain][:accounts][:users].each do |user|
-  next if node[node.domain][:accounts][:ignore_users].include?(user)
+node[:accounts][:users].each do |user|
+  next if node[:accounts][:ignore_users].include?(user)
   setup_user user
   setup_env  user
 end

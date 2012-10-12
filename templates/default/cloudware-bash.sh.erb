@@ -28,13 +28,7 @@ alias ss="s su -"
 
 # don't process unless we have a pty
 #  this way things like scp work 
-case $- in
-*i*)    # interactive shell
-;;
-*)      # non-interactive shell
-  return
-;;
-esac
+[ -z "$PS1" ] && return
 
 # Prompt stuff
 function parse_git_branch {

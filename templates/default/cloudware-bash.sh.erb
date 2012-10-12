@@ -2,11 +2,6 @@
 # <%= @cookbook_name %>
 #
 
-# don't process unless we have a pty
-#  this way things like scp work 
-[ -z "$PS1" ] && exit
-
-
 # include omnichef if its there
 if [ -d "/opt/chef/bin" ] ; then
   PATH=$PATH:/opt/chef/bin
@@ -29,6 +24,17 @@ alias gcp="git cherry-pick"
 
 alias s="sudo"
 alias ss="s su -"
+
+
+# don't process unless we have a pty
+#  this way things like scp work 
+case $- in
+*i*)    # interactive shell
+;;
+*)      # non-interactive shell
+  return
+;;
+esac
 
 # Prompt stuff
 function parse_git_branch {

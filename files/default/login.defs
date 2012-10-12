@@ -16,19 +16,19 @@ MAIL_DIR	mail
 #
 PASS_MAX_DAYS	99999
 PASS_MIN_DAYS	0
-PASS_MIN_LEN	5
+#PASS_MIN_LEN	5
 PASS_WARN_AGE	7
 
 #
 # Min/max values for automatic uid selection in useradd
 #
-UID_MIN			 510
+UID_MIN			510
 UID_MAX			9999
 
 #
 # Min/max values for automatic gid selection in groupadd
 #
-GID_MIN			  510
+GID_MIN			 510
 GID_MAX		 	 9999
 
 #

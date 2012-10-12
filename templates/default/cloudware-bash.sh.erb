@@ -4,12 +4,44 @@
 
 # include omnichef if its there
 if [ -d "/opt/chef/bin" ] ; then
-  PATH=$PATH:/opt/chef/bin
+  export PATH=$PATH:/opt/chef/bin
 fi
 
-PATH=$PATH:~/bin
+# don't process unless we have a pty
+#  this way things like scp work 
+[ -z "$PS1" ] && return
 
-# User specific aliases and functions
+
+# don't put duplicate lines or lines starting with space in the history.
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=5000
+HISTFILESIZE=4000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+  if [ -f /etc/DIR_COLORS ] ; then
+    test -r /etc/DIR_COLORS && eval "$(dircolors /etc/DIR_COLORS)"
+  fi
+  alias ls='ls --color=auto'
+  alias dir='dir --color=auto'
+  alias vdir='vdir --color=auto'
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
+fi
+
 alias k="knife"
 alias kcu="knife cookbook upload" 
 alias kdb="knife data bag"
@@ -25,10 +57,11 @@ alias gcp="git cherry-pick"
 alias s="sudo"
 alias ss="s su -"
 
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
 
-# don't process unless we have a pty
-#  this way things like scp work 
-[ -z "$PS1" ] && return
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Prompt stuff
 function parse_git_branch {

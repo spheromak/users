@@ -12,6 +12,11 @@ fi
 [ -z "$PS1" ] && return
 
 
+domain=""
+if [ -f /bin/dnsdomainname ] ; then
+  domain=".`/bin/dnsdomainname`"
+fi
+
 # don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth
 
@@ -120,7 +125,7 @@ function bash_prompt() {
 
     local UC=$G                  # user's color
     [ $UID -eq "0" ] && UC=$EMR   # root's color
-    PS1="$TITLEBAR$UC\u$C@$Y\h $M\$(knife_env) $R\$(parse_git_branch)  $C\w$NONE\n\\$ "
+    PS1="$TITLEBAR$UC\u$C@$Y\h$domain $M\$(knife_env) $R\$(parse_git_branch)  $C\w$NONE\n\\$ "
     PS2="> "
     PS3='> '
     PS4='+ '

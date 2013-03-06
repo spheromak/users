@@ -9,7 +9,7 @@ class Chef
     class User
       class Useradd < Chef::Provider::User
         def unlock_user
-          command = (node[:platform] =~ /centos/)?"passwd -u":"usermod -U"
+          command = ("rhat" == node[:platform_family]) ? "passwd -u" : "usermod -U"
           run_command(:command => "#{command} #{@new_resource.username}")
         end
       end

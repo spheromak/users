@@ -21,18 +21,18 @@ module  Cloud
       end
     end
     
-    # if cached is true and @helper_cache[:all_users] is already set, 
+    # if cached is true and node.run_state[:helper_cache][:all_users] is already set, 
     # get_user reads from and write into the cache.
     def get_user(usr=nil, cached=true)
       if usr.is_a? String
-        @helper_cache ||= get_helper_cache
-        if cached and @helper_cache.has_key?(:all_users) and @helper_cache[:all_users] != nil
-          i = @helper_cache[:all_users].index {|u| u['id'] == usr}
+        node.run_state[:helper_cache] ||= Hash.new
+        if cached and node.run_state[:helper_cache].has_key?(:all_users) and node.run_state[:helper_cache][:all_users] != nil
+          i = node.run_state[:helper_cache][:all_users].index {|u| u['id'] == usr}
           if i != nil
-            usr = @helper_cache[:all_users].fetch(i)
+            usr = node.run_state[:helper_cache][:all_users].fetch(i)
           else
             usr = data_bag_item("users", usr)
-            @helper_cache[:all_users] << usr
+            node.run_state[:helper_cache][:all_users] << usr
           end
         else
           usr = data_bag_item("users", usr)
@@ -75,14 +75,14 @@ module  Cloud
       end
     end
 
-    # if cached is true and @helper_cache[:groups] is already set, it searches the cache.
+    # if cached is true and node.run_state[:helper_cache][:groups] is already set, it searches the cache.
     # it doesn't store groups in the cache. only group_members put groups into the cache.
     def get_group(grp,cached=true)
       if grp.is_a? String
-        @helper_cache ||= get_helper_cache
-        if cached and @helper_cache.has_key?(:groups) and @helper_cache[:groups] != nil \
-          and (i = @helper_cache[:groups].index {|g| g['id'] == grp})
-          group = @helper_cache[:groups].fetch(i)
+        node.run_state[:helper_cache] ||= Hash.new
+        if cached and node.run_state[:helper_cache].has_key?(:groups) and node.run_state[:helper_cache][:groups] != nil \
+          and (i = node.run_state[:helper_cache][:groups].index {|g| g['id'] == grp})
+          group = node.run_state[:helper_cache][:groups].fetch(i)
         else
           begin
             group = data_bag_item("groups", grp) 
@@ -111,24 +111,24 @@ module  Cloud
     end
 
     # If cached is true, group_members fetches groups and users from data bag
-    # into @helper_cache if they are not yet in the cache.
+    # into node.run_state[:helper_cache] if they are not yet in the cache.
     # If they are already in the cache, it doesn't try to search them.
-    # @helper_cache[:groups] and @helper_cache[:all_users] are initialized only by group_members.
+    # node.run_state[:helper_cache][:groups] and node.run_state[:helper_cache][:all_users] are initialized only by group_members.
     # That is, if you want to use cached users, you must call group_members or all_users first.
     def group_members(grpid, cached=true)
       grpid = grpid['id'] unless grpid.is_a? String
       list = Array.new
       if cached  
-        @helper_cache ||= get_helper_cache
-        @helper_cache[:all_users] ||= Array.new()
-        @helper_cache[:groups] ||= Array.new()
+        node.run_state[:helper_cache] ||= Hash.new
+        node.run_state[:helper_cache][:all_users] ||= Array.new()
+        node.run_state[:helper_cache][:groups] ||= Array.new()
 
         Chef::Log.debug "Using cached group members for #{grpid} if they exist"
         # if this is the first time through these things shouldn't be populated
-        unless @helper_cache[:groups].empty? or @helper_cache[:all_users].empty?
-          @helper_cache[:groups].each do |g| 
+        unless node.run_state[:helper_cache][:groups].empty? or node.run_state[:helper_cache][:all_users].empty?
+          node.run_state[:helper_cache][:groups].each do |g| 
             if grpid == g['id']
-              @helper_cache[:all_users].each do |u|
+              node.run_state[:helper_cache][:all_users].each do |u|
                 # grpid =  id field from group bag i.e. "wheel"
                 if u['groups'].include?(grpid)
                   list << u['id']
@@ -137,14 +137,14 @@ module  Cloud
               return list
             end
           end
-          # if grp is not in @helper_cache[:groups]
-          @helper_cache[:groups] << get_group(grpid, false)
+          # if grp is not in node.run_state[:helper_cache][:groups]
+          node.run_state[:helper_cache][:groups] << get_group(grpid, false)
         end
  
         # if cached is not true or grp members are not in the cache 
         search(:users, "groups:#{grpid} NOT status:remove") do |u|
           list <<  u['id']
-          @helper_cache[:all_users] << u if cached 
+          node.run_state[:helper_cache][:all_users] << u if cached 
         end
       end
       Chef::Log.debug "group_members returns list: #{list}."
@@ -153,7 +153,7 @@ module  Cloud
 
     # all_users fetches all user's id list in node[:accounts][:groups] groups and
     # node[:accounts][:users].
-    # It calls group_members for each group so that every group users are stored in @helper_cache 
+    # It calls group_members for each group so that every group users are stored in node.run_state[:helper_cache] 
     # if cached is true.
     def all_users(cached=true)
       users = Array.new

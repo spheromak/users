@@ -13,7 +13,7 @@ class Chef::Resource::User
   include Cloud::User
 end
 
-include_recipe  "vim::cloudware"
+include_recipe  "ktc-vim"
 include_recipe  "users::bash"
 include_recipe  "users::login"
 

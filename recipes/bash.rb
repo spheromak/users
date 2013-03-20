@@ -34,7 +34,7 @@ end
 
 # we touch bash_profile for root so that we ignore the ubuntu bashrc placed there
 # by default
-file "/root/.bash_proflie" do
+file "/root/.bash_profile" do
   action :create_if_missing
   content "# overides ~/bashrc on ubuntu"
   owner "root"

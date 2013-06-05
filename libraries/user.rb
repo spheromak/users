@@ -20,8 +20,8 @@ module  Cloud
         false
       end
     end
-    
-    # if cached is true and node.run_state[:helper_cache][:all_users] is already set, 
+
+    # if cached is true and node.run_state[:helper_cache][:all_users] is already set,
     # get_user reads from and write into the cache.
     def get_user(usr=nil, cached=true)
       if usr.is_a? String
@@ -40,14 +40,20 @@ module  Cloud
       end
       usr
     end
-    
+
+    def remove_group(g)
+      group g['id'] do
+        action :remove
+      end
+    end
+
     def remove_user(u)
-      user u['id'] do  
+      user u['id'] do
         action :remove
         supports :manage_home => true
       end
     end
- 
+
     def setup_user(u)
       u = get_user(u)
       Chef::Log.debug "u: #{u}"
@@ -65,7 +71,7 @@ module  Cloud
             gid      u['groups'].first
             shell    get_shell(u)
             comment  "#{u['comment']}"
-            action   action  
+            action   action
             supports :manage_home => true
             # home is an method in user class
             #       home is the var we set up top
@@ -85,7 +91,7 @@ module  Cloud
           group = node.run_state[:helper_cache][:groups].fetch(i)
         else
           begin
-            group = data_bag_item("groups", grp) 
+            group = data_bag_item("groups", grp)
           rescue Net::HTTPServerException => e
             Chef::Log.error "Error pulling group databag: #{grp}, Probably doesn't exist;#{e.message}"
             group = nil
@@ -97,7 +103,7 @@ module  Cloud
 
     def setup_group(grp, users=nil)
       grp = get_group(grp)
-      if grp  
+      if grp
         group "#{grp['id']}" do
           if users
             members users
@@ -118,7 +124,7 @@ module  Cloud
     def group_members(grpid, cached=true)
       grpid = grpid['id'] unless grpid.is_a? String
       list = Array.new
-      if cached  
+      if cached
         node.run_state[:helper_cache] ||= Hash.new
         node.run_state[:helper_cache][:all_users] ||= Array.new()
         node.run_state[:helper_cache][:groups] ||= Array.new()
@@ -126,7 +132,7 @@ module  Cloud
         Chef::Log.debug "Using cached group members for #{grpid} if they exist"
         # if this is the first time through these things shouldn't be populated
         unless node.run_state[:helper_cache][:groups].empty? or node.run_state[:helper_cache][:all_users].empty?
-          node.run_state[:helper_cache][:groups].each do |g| 
+          node.run_state[:helper_cache][:groups].each do |g|
             if grpid == g['id']
               node.run_state[:helper_cache][:all_users].each do |u|
                 # grpid =  id field from group bag i.e. "wheel"
@@ -140,11 +146,11 @@ module  Cloud
           # if grp is not in node.run_state[:helper_cache][:groups]
           node.run_state[:helper_cache][:groups] << get_group(grpid, false)
         end
- 
-        # if cached is not true or grp members are not in the cache 
+
+        # if cached is not true or grp members are not in the cache
         search(:users, "groups:#{grpid} NOT status:remove") do |u|
           list <<  u['id']
-          node.run_state[:helper_cache][:all_users] << u if cached 
+          node.run_state[:helper_cache][:all_users] << u if cached
         end
       end
       Chef::Log.debug "group_members returns list: #{list}."
@@ -153,7 +159,7 @@ module  Cloud
 
     # all_users fetches all user's id list in node[:accounts][:groups] groups and
     # node[:accounts][:users].
-    # It calls group_members for each group so that every group users are stored in node.run_state[:helper_cache] 
+    # It calls group_members for each group so that every group users are stored in node.run_state[:helper_cache]
     # if cached is true.
     def all_users(cached=true)
       users = Array.new
@@ -176,16 +182,16 @@ module  Cloud
       Chef::Log.debug "all_users returns list: #{users}."
       users
     end
-       
+
     def get_user_status(u)
       u = get_user(u)
       status = nil
       if u.has_key?('status')
         status = case u['status']
-        when "remove", "lock", "unlock" 
+        when "remove", "lock", "unlock"
           u['status']
-        else 
-          Chef::Log.warn "user[#{u['id']}] status:'#{u['status']}' is not in 'remove/lock/unlock'. Ignoring it." 
+        else
+          Chef::Log.warn "user[#{u['id']}] status:'#{u['status']}' is not in 'remove/lock/unlock'. Ignoring it."
           nil
         end
       end
@@ -194,16 +200,16 @@ module  Cloud
     def get_home(u)
       u = get_user(u)
       home_dir = u['home'] ? u['home'] : "/home/#{u['id']}"
-    end 
-    
+    end
+
     def get_shell(u)
       u = get_user(u)
       shell = u['shell'] ? u['shell'] : "/bin/false"
     end
-  
+
     def setup_env(u)
       u = get_user(u)
-      return if u['status'] =~ /remove/ 
+      return if u['status'] =~ /remove/
       return unless u.has_key?('setup')
 
       u['setup'].each do |cmd|
@@ -213,8 +219,8 @@ module  Cloud
         else
           Chef::Log.debug("No configuration setup for #{cmd}")
         end
-      end 
-    end 
+      end
+    end
 
     def get_setup_users(all_users, setup)
       users = Array.new

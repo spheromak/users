@@ -17,9 +17,8 @@ include_recipe  "ktc-vim"
 include_recipe  "users::bash"
 include_recipe  "users::login"
 
-%w/wheel users/.each { |group|  setup_group(group) } 
 
-# Remove users 
+# Remove users
 search(:users, "status:remove") do |user|
   remove_user user
 end
@@ -33,7 +32,7 @@ end
 node[:accounts][:groups].each do |group|
   members = group_members group
 
-  # need to make sure the group exists b4 we add users. 
+  # need to make sure the group exists b4 we add users.
   setup_group(group)
 
   unless members.empty?

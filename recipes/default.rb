@@ -28,12 +28,16 @@ search(:groups, "status:remove") do |group|
   remove_group group
 end
 
+#
+# create all groups first then loop through and add users
+# This way a user can be in many groups
+#
+node[:accounts][:groups].each do |group|
+  setup_group(group)
+end
 
 node[:accounts][:groups].each do |group|
   members = group_members group
-
-  # need to make sure the group exists b4 we add users.
-  setup_group(group)
 
   unless members.empty?
     members.each do |user|

@@ -50,7 +50,7 @@ module  Cloud
     def remove_user(u)
       user u['id'] do
         action :remove
-        supports :manage_home => true
+        supports :manage_home => node[:users][:manage_home]
       end
     end
 
@@ -72,7 +72,7 @@ module  Cloud
             shell    get_shell(u)
             comment  "#{u['comment']}"
             action   action
-            supports :manage_home => true
+            supports :manage_home => node[:users][:manage_home]
             # home is an method in user class
             #       home is the var we set up top
             home home

@@ -66,7 +66,7 @@ module  Cloud
         unless home.nil?
           # create the dir here if its missing
           directory home do
-            action :cerate
+            action :create
             owner u['uid']
             mode 770
             not_if { File.directory? home }

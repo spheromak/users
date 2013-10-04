@@ -1,0 +1,6 @@
+{
+  "id": "nagios",
+  "gid": 10010,
+  "append": false
+}
+

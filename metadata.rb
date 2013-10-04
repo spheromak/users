@@ -7,7 +7,7 @@ long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version           "1.1.4"
 
 depends "helpers"
-
-suggests "ktc-vim"
+depends "ktc-vim"
+depends "ubuntu"
 suggests "ktc-git"
 suggests "ktc-ssh"

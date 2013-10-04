@@ -1,0 +1,16 @@
+{
+  "id": "yoda",
+  "ssh_keys": "ssh-dss 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 yoda@trendy",
+  "groups": [ "wheel", "users", "admins" ],
+  "uid": 10001,
+  "gid": "wheel",
+  "shell": "\/bin\/bash",
+  "comment": "BOFH",
+  "email": "",
+  "personal_email": "",
+  "htpasswd": "ASDASDQWE!!!@#QWE",
+  "nagios": {
+    "pager": ""
+  },
+  "setup": [ "ssh", "bash", "top", "screen", "vim", "git" ]
+}

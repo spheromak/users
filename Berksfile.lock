@@ -1,0 +1,35 @@
+{
+  "sources": {
+    "users": {
+      "path": "."
+    },
+    "helpers": {
+      "locked_version": "1.2.1",
+      "git": "git://github.com/cloudware-cookbooks/helpers.git",
+      "ref": "b98c5fd59c44707fb4ae86d005ebfb41c4d46f6c"
+    },
+    "ktc-vim": {
+      "locked_version": "0.1.5",
+      "git": "git://github.com/cloudware-cookbooks/ktc-vim.git",
+      "ref": "d3c61663d50b1fb9eaf6eb1456ec41d08c1c5769"
+    },
+    "ubuntu": {
+      "locked_version": "1.1.2"
+    },
+    "apt": {
+      "locked_version": "2.1.0"
+    },
+    "helpers-search": {
+      "locked_version": "0.0.3"
+    },
+    "helpers-databags": {
+      "locked_version": "1.0.0"
+    },
+    "ruby-helper": {
+      "locked_version": "0.0.1"
+    },
+    "vim": {
+      "locked_version": "1.0.2"
+    }
+  }
+}

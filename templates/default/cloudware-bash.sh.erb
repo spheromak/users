@@ -126,7 +126,7 @@ function bash_prompt() {
 
     local UC=$G                   # user's color
     [ $UID -eq "0" ] && UC=$EMR   # root's color
-    PS1="$TITLEBAR$UC\u$C@$Y\h$domain e:$EMR<%= node.chef_environment.upcase %> $M\$(knife_env) $R\$(parse_git_branch)  $C\w$NONE\n\\$ "
+    PS1="$TITLEBAR$UC\u$C@$Y\h$domain $EMR <%= @env %> $M\$(knife_env) $R\$(parse_git_branch)  $C\w$NONE\n\\$ "
     PS2="> "
     PS3='> '
     PS4='+ '

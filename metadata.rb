@@ -4,7 +4,7 @@ maintainer_email  "spheromak@gmail.com"
 license           "Apache 2"
 description       "Creates users and groups from databags and attribs"
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version           "1.1.5"
+version           "1.1.6"
 
 depends "helpers"
 depends "ktc-vim"

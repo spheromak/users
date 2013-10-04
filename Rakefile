@@ -24,7 +24,7 @@ namespace :test do
     desc "Run cane to check quality metrics"
     Cane::RakeTask.new(:quality) do |cane|
       canefile = ".cane"
-      cane.abc_max = 14
+      cane.abc_max = 25
       cane.abc_glob =  '{recipes,libraries,resources,providers}/**/*.rb'
       cane.no_style = true
       cane.parallel = true

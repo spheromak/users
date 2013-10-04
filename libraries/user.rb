@@ -27,7 +27,7 @@ module  Cloud
       if usr.is_a? String
         node.run_state[:helper_cache] ||= Hash.new
         if cached and node.run_state[:helper_cache].has_key?(:all_users) and node.run_state[:helper_cache][:all_users] != nil
-          i = node.run_state[:helper_cache][:all_users].index {|u| u['id'] == usr}
+          i = node.run_state[:helper_cache][:all_users].index { |u| u['id'] == usr }
           if i != nil
             usr = node.run_state[:helper_cache][:all_users].fetch(i)
           else
@@ -68,7 +68,7 @@ module  Cloud
           directory home do
             action :create
             owner u['uid']
-            mode 770
+            mode 0770
             not_if { File.directory? home }
           end
 
@@ -78,7 +78,7 @@ module  Cloud
             uid      u['uid']
             gid      u['groups'].first
             shell    get_shell(u)
-            comment  "#{u['comment']}"
+            comment  u['comment']
             action   action
             supports :manage_home => node[:users][:manage_home]
             # home is an method in user class
@@ -91,11 +91,11 @@ module  Cloud
 
     # if cached is true and node.run_state[:helper_cache][:groups] is already set, it searches the cache.
     # it doesn't store groups in the cache. only group_members put groups into the cache.
-    def get_group(grp,cached=true)
+    def get_group(grp, cached=true)
       if grp.is_a? String
         node.run_state[:helper_cache] ||= Hash.new
         if cached and node.run_state[:helper_cache].has_key?(:groups) and node.run_state[:helper_cache][:groups] != nil \
-          and (i = node.run_state[:helper_cache][:groups].index {|g| g['id'] == grp})
+          and (i = node.run_state[:helper_cache][:groups].index { |g| g['id'] == grp })
           group = node.run_state[:helper_cache][:groups].fetch(i)
         else
           begin
@@ -112,7 +112,7 @@ module  Cloud
     def setup_group(grp, users=nil)
       grp = get_group(grp)
       if grp
-        group "#{grp['id']}" do
+        group grp['id'] do
           if users
             members users
             append grp['append'] if grp.has_key? "append"

@@ -64,6 +64,14 @@ module  Cloud
         remove_user(u) unless home.nil?
       else
         unless home.nil?
+          # create the dir here if its missing
+          directory home do
+            action :cerate
+            owner u['uid']
+            mode 770
+            not_if { File.directory? home }
+          end
+
           action = [:create, :manage]
           action << status.to_sym if status =~ /lock/
           user u['id'] do

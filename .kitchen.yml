@@ -8,6 +8,8 @@ platforms:
     box: opscode-centos-6.4_chef-11.4.4
     box_url:  https://opscode-vm.s3.amazonaws.com/vagrant/opscode_centos-6.4_chef-11.4.4.box
 - name: ubuntu-12.04_chef-11.4.4
+  run_list:
+    - recipe[ubuntu]
   driver_config:
     box: opscode-ubuntu-12.04_chef-11.4.4
     box_url: https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_chef-11.4.4.box
@@ -15,6 +17,5 @@ platforms:
 suites:
 - name: default
   run_list:
-    - recipe[ubuntu]
     - recipe[users]
   attributes:

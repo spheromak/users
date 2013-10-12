@@ -26,7 +26,10 @@ module  Cloud
     def get_user(usr=nil, cached=true)
       if usr.is_a? String
         node.run_state[:helper_cache] ||= Hash.new
-        if cached and node.run_state[:helper_cache].has_key?(:all_users) and node.run_state[:helper_cache][:all_users] != nil
+        if cached and
+          node.run_state[:helper_cache].has_key?(:all_users) and
+          node.run_state[:helper_cache][:all_users] != nil
+
           i = node.run_state[:helper_cache][:all_users].index { |u| u['id'] == usr }
           if i != nil
             usr = node.run_state[:helper_cache][:all_users].fetch(i)
@@ -68,7 +71,7 @@ module  Cloud
           directory home do
             action :create
             owner u['uid']
-            mode 0770
+            mode 0750
             not_if { File.directory? home }
           end
 

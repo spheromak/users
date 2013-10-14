@@ -2,30 +2,24 @@
 # Cookbook Name:: users
 # Recipe:: default
 #
-# Jason K. Jackson <jasonjackson@gmail.com>
 # Jesse Nelson <spheromak@gmail.com>
+# Jason K. Jackson <jasonjackson@gmail.com>
 
-class Chef::Recipe
-  include Cloud::User
-end
-
-class Chef::Resource::User
-  include Cloud::User
-end
-
-include_recipe  "ktc-vim"
 include_recipe  "users::bash"
 include_recipe  "users::login"
 
+# Setup Users lib
+KTC::User.node = node
+KTC::User.run_context = run_context
 
 # Remove users
 search(:users, "status:remove") do |user|
-  remove_user user
+  KTC::User.remove_user user
 end
 
 # Remove groups
 search(:groups, "status:remove") do |group|
-  remove_group group
+  KTC::User.remove_group group
 end
 
 #
@@ -33,24 +27,24 @@ end
 # This way a user can be in many groups
 #
 node[:accounts][:groups].each do |group|
-  setup_group(group)
+  KTC::User.setup_group(group)
 end
 
 node[:accounts][:groups].each do |group|
-  members = group_members group
+  members = KTC::User.group_members group
 
   unless members.empty?
     members.each do |user|
       next if node[:accounts][:ignore_users].include?(user)
-      setup_user user
-      setup_env  user
+      KTC::User.setup_user user
+      KTC::User.setup_env  user
     end
   end
-  setup_group(group, members)
+  KTC::User.setup_group(group, members)
 end
 
 node[:accounts][:users].each do |user|
   next if node[:accounts][:ignore_users].include?(user)
-  setup_user user
-  setup_env  user
+  KTC::User.setup_user user
+  KTC::User.setup_env  user
 end

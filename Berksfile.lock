@@ -13,12 +13,6 @@
       "git": "git://github.com/cloudware-cookbooks/ktc-vim.git",
       "ref": "d3c61663d50b1fb9eaf6eb1456ec41d08c1c5769"
     },
-    "ubuntu": {
-      "locked_version": "1.1.2"
-    },
-    "apt": {
-      "locked_version": "2.1.1"
-    },
     "helpers-search": {
       "locked_version": "0.0.3"
     },
@@ -30,6 +24,9 @@
     },
     "vim": {
       "locked_version": "1.0.2"
+    },
+    "apt": {
+      "locked_version": "2.2.1"
     }
   }
 }

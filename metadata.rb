@@ -6,8 +6,5 @@ description       "Creates users and groups from databags and attribs"
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version           "1.1.7"
 
-depends "helpers"
-depends "ktc-vim"
-depends "ubuntu"
 suggests "ktc-git"
 suggests "ktc-ssh"

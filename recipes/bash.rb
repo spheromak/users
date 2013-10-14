@@ -1,6 +1,5 @@
 
 template "/etc/profile.d/cloudware-bash.sh" do
-  variables(env: node.chef_environment.upcase)
   owner "root"
   group "root"
   mode  0755

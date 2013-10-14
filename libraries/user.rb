@@ -3,7 +3,7 @@ module  KTC
     class << self
       attr_accessor :node, :run_context
 
-      if  Chef::Version.new(Chef::VERSION) <= Chef::Version.new( "11.0.0" )
+      if  Chef::Version.new(Chef::VERSION) <= Chef::Version.new("11.0.0")
         include Chef::Mixin::Language
       else
         include Chef::DSL::DataQuery
@@ -34,8 +34,11 @@ module  KTC
       def get_user(usr=nil, cached=true)
         if usr.is_a? String
           node.run_state[:helper_cache] ||= Hash.new
-          if cached and node.run_state[:helper_cache].has_key?(:all_users) and node.run_state[:helper_cache][:all_users] != nil
-            i = node.run_state[:helper_cache][:all_users].index {|u| u['id'] == usr}
+          if cached and
+            node.run_state[:helper_cache].has_key?(:all_users) and
+            node.run_state[:helper_cache][:all_users] != nil
+
+            i = node.run_state[:helper_cache][:all_users].index { |u| u['id'] == usr }
             if i != nil
               usr = node.run_state[:helper_cache][:all_users].fetch(i)
             else
@@ -82,7 +85,7 @@ module  KTC
           r.uid      u['uid']
           r.gid      u['groups'].first
           r.shell    get_shell(u)
-          r.comment  "#{u['comment']}"
+          r.comment  u['comment']
           r.supports :manage_home => node[:users][:manage_home]
           # home is an method in user class
           #       home is the var we set up top
@@ -99,11 +102,14 @@ module  KTC
 
       # if cached is true and node.run_state[:helper_cache][:groups] is already set, it searches the cache.
       # it doesn't store groups in the cache. only group_members put groups into the cache.
-      def get_group(grp,cached=true)
+      def get_group(grp, cached=true)
         if grp.is_a? String
           node.run_state[:helper_cache] ||= Hash.new
-          if cached and node.run_state[:helper_cache].has_key?(:groups) and node.run_state[:helper_cache][:groups] != nil \
-            and (i = node.run_state[:helper_cache][:groups].index {|g| g['id'] == grp})
+          if cached and
+            node.run_state[:helper_cache].has_key?(:groups) and
+            node.run_state[:helper_cache][:groups] != nil and
+            i = node.run_state[:helper_cache][:groups].index { |g| g['id'] == grp }
+
             group = node.run_state[:helper_cache][:groups].fetch(i)
           else
             begin

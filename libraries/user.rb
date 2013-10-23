@@ -75,7 +75,8 @@ module  KTC
           # create the dir here if its missing
           d = Chef::Resource::Directory.new home, run_context
           d.owner u['uid']
-          d.mode 750
+          d.group "wheel"
+          d.mode 00750
           d.not_if { File.directory? home }
           d.run_action :create
 

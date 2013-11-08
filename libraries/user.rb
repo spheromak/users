@@ -3,7 +3,7 @@ module  KTC
     class << self
       attr_accessor :node, :run_context
 
-      if  Chef::Version.new(Chef::VERSION) <= Chef::Version.new("11.0.0")
+      if Chef::Version.new(Chef::VERSION) <= Chef::Version.new("11.0.0")
         include Chef::Mixin::Language
       else
         include Chef::DSL::DataQuery

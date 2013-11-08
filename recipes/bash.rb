@@ -3,6 +3,7 @@ template "/etc/profile.d/cloudware-bash.sh" do
   owner "root"
   group "root"
   mode  0755
+  variables(env: node.chef_environment.upcase)
 end
 
 cookbook_file "/etc/DIR_COLORS" do

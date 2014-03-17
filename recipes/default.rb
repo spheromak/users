@@ -5,20 +5,20 @@
 # Jesse Nelson <spheromak@gmail.com>
 # Jason K. Jackson <jasonjackson@gmail.com>
 
-include_recipe  "users::bash"
-include_recipe  "users::login"
+include_recipe  'users::bash'
+include_recipe  'users::login'
 
 # Setup Users lib
 KTC::User.node = node
 KTC::User.run_context = run_context
 
 # Remove users
-search(:users, "status:remove") do |user|
+search(:users, 'status:remove') do |user|
   KTC::User.remove_user user
 end
 
 # Remove groups
-search(:groups, "status:remove") do |group|
+search(:groups, 'status:remove') do |group|
   KTC::User.remove_group group
 end
 

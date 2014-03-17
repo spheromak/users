@@ -7,10 +7,11 @@ require 'chef/provider/user'
 class Chef
   class Provider
     class User
+      # Useradd monkey patch
       class Useradd < Chef::Provider::User
         def unlock_user
-          command = ("rhat" == node[:platform_family]) ? "passwd -u" : "usermod -U"
-          run_command(:command => "#{command} #{@new_resource.username}")
+          cmd = ('rhat' == node[:platform_family]) ? 'passwd -u' : 'usermod -U'
+          run_command(command: "#{cmd} #{@new_resource.username}")
         end
       end
     end

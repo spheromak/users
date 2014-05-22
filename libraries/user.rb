@@ -269,7 +269,11 @@ module  KTC
         r = Chef::Resource::Template.new  "#{home_dir}/.#{rc}", run_context
         r.source "#{rc}.erb"
         r.owner  usr['id']
-        r.group  usr['groups'].first
+        if usr.key?('gid')
+           r.group usr['gid']
+        else
+          r.group r.groups.first
+        end
         r.mode   "0600"
         r.variables :u => usr
 
